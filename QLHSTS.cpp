@@ -49,8 +49,8 @@ struct ThiSinh
 
 struct QuanLyHoSoThiSinh {
 	int sts;
-	ThiSinh dsTS[100];
-	Khoa dsKH[KHOA_MAX];
+	ThiSinh TS;
+	// Khoa dsKH[KHOA_MAX];
 };
 
 struct NodeQuanLyHoSoThiSinh {
@@ -74,8 +74,8 @@ Khoa CNTT =
 
 Khoa NN =
 { "NNNHB101", "Ngoai Ngu", "101 Nguyen Hien",
-	{{"NN1", "Tieng Trung", 34.94f, 150}, {"NN2", "Tieng Anh", 33.85f, 200},
-	{"NN3", "Tieng Nhat", 26.5f, 100}},
+	{{"NN1", "Tieng Trung", 24.94f, 150}, {"NN2", "Tieng Anh", 23.85f, 200},
+	{"NN3", "Tieng Nhat", 22.5f, 100}},
 };
 
 Khoa BC =
@@ -118,18 +118,18 @@ void InThongTinKhoaVaNganh() {
 	InKhoa(BC);
 }
 
-float DUT(string KV) {
-	float UT = 0.0f;
-	if (KV == "KV01")
-		UT = 0.75f;
-	else if (KV == "KV02")
-		UT = 0.5f;
-	else if (KV == "KV03")
-		UT = 0.25f;
-	else if (KV == "KV04")
-		UT = 0.1f;
-	return UT;
-}
+// float DUT(string KV) {
+// 	float UT = 0.0f;
+// 	if (KV == "KV01")
+// 		UT = 0.75f;
+// 	else if (KV == "KV02")
+// 		UT = 0.5f;
+// 	else if (KV == "KV03")
+// 		UT = 0.25f;
+// 	else if (KV == "KV04")
+// 		UT = 0.1f;
+// 	return UT;
+// }
 
 void NhapThiSinh(ThiSinh& a) {
 	std::cin.ignore();
@@ -161,7 +161,8 @@ void NhapThiSinh(ThiSinh& a) {
 	}
 
 	// Lay diem uu tien
-	a.fDiemUT = DUT(a.sKhuVuc);
+	// a.fDiemUT = DUT(a.sKhuVuc);
+	a.fDiemUT = (a.sKhuVuc == "KV01") ? 0.75 : (a.sKhuVuc == "KV02") ? 0.5 : (a.sKhuVuc == "KV03") ? 0.25 : (a.sKhuVuc == "KV04") ? 0.1 :0;
 
 	std::cout << "Nhap diem mon 1: "; cin >> a.fDiemMon1;
 	std::cout << "Nhap diem mon 2: "; cin >> a.fDiemMon2;
@@ -174,13 +175,13 @@ void NhapThiSinh(ThiSinh& a) {
 void TieuDeThiSinh()
 {
 	std::cout << std::endl << std::setw(5) << std::setiosflags(std::ios::left) << "STT";
-	std::cout << std::setw(8) << "MA HS";
-	std::cout << std::setw(10) << "SBD";
-	std::cout << std::setw(25) << "Ho Ten";
+	std::cout << std::setw(15) << "MA HS";
+	std::cout << std::setw(15) << "SBD";
+	std::cout << std::setw(32) << "Ho Ten";
 	std::cout << std::setw(15) << "Ngay Sinh";
 	std::cout << std::setw(15) << "Que Quan";
-	std::cout << std::setw(6) << "KV";
-	std::cout << std::setw(5) << "GT";
+	std::cout << std::setw(10) << "KV";
+	std::cout << std::setw(8) << "GT";
 	std::cout << std::setw(15) << "So DT";
 	std::cout << std::setw(12) << "Tong Diem";
 }
@@ -188,13 +189,13 @@ void TieuDeThiSinh()
 void InThiSinh(ThiSinh a) {
 	TieuDeThiSinh();
 	std::cout << std::endl << std::setw(1) << std::setiosflags(std::ios::left) << "*)   ";
-	std::cout << std::setw(8) << a.sMaHS;
-	std::cout << std::setw(10) << a.sSBD;
-	std::cout << std::setw(25) << a.sHoTen;
+	std::cout << std::setw(15) << a.sMaHS;
+	std::cout << std::setw(15) << a.sSBD;
+	std::cout << std::setw(32) << a.sHoTen;
 	std::cout << std::setw(15) << a.sNgaySinh;
 	std::cout << std::setw(15) << a.sQueQuan;
-	std::cout << std::setw(6) << a.sKhuVuc;
-	std::cout << std::setw(5) << a.sGioiTinh;
+	std::cout << std::setw(10) << a.sKhuVuc;
+	std::cout << std::setw(8) << a.sGioiTinh;
 	std::cout << std::setw(15) << a.sSDT;
 	std::cout << std::setw(12) << a.fTongDiem;
 
@@ -205,19 +206,23 @@ void InThiSinh(ThiSinh a) {
 
 void NhapQuanLyHoSo(QuanLyHoSoThiSinh& a) {
 	cout << "\n===NHAP THONG TIN HO SO===\n";
-	std::cout << "\nNhap so thi sinh muon nhap: "; cin >> a.sts;
-	for (int i = 0; i < a.sts; i++)
-	{
-		cout << "\n\n(Nhap Thi sinh thu " << i + 1 << ")" << endl;
-		NhapThiSinh(a.dsTS[i]);
-	}
+	// std::cout << "\nNhap so thi sinh muon nhap: "; cin >> a.sts;
+	// for (int i = 0; i < a.sts; i++)
+	// {
+	// 	cout << "\n\n(Nhap Thi sinh thu " << i + 1 << ")" << endl;
+	// 	NhapThiSinh(a.TS);
+	// }
+	NhapThiSinh(a.TS);
 
 }
 
+
+
 void InQuanLyHoSo(QuanLyHoSoThiSinh& a) {
 	cout << "\n===HO SO CUA CAC THI SINH===\n";
-	for (int i = 0; i < a.sts; i++)
-		InThiSinh(a.dsTS[i]);
+	// for (int i = 0; i < a.sts; i++)
+	// 	InThiSinh(a.dsTS[i]);
+	InThiSinh(a.TS);
 }
 
 void QuanLyHoSoIniatior(ListQuanLyHoSoThiSinh& Q) {
@@ -249,21 +254,95 @@ void ChenDauQLHSTS(ListQuanLyHoSoThiSinh& Q, NodeQuanLyHoSoThiSinh* p) {
 	}
 }
 
-void NhapDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
+void NhapDSQLHSTS(ListQuanLyHoSoThiSinh& Q){
+	int n,i;
 	NodeQuanLyHoSoThiSinh* p;
 	QuanLyHoSoThiSinh x;
-	NhapQuanLyHoSo(x);
-	p = getNodeQLHSTS(x);
-	ChenDauQLHSTS(Q, p);
+	cout<<"Nhap so ho so can quan ly : ";
+	cin>>n;
+	for(i=0;i<n;i++){
+		NhapQuanLyHoSo(x);
+		p = getNodeQLHSTS(x);
+		ChenDauQLHSTS(Q,p);
+	}
 }
+
+// void NhapDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
+// 	NodeQuanLyHoSoThiSinh* p;
+// 	QuanLyHoSoThiSinh x;
+// 	NhapQuanLyHoSo(x);
+// 	p = getNodeQLHSTS(x);
+// 	ChenDauQLHSTS(Q, p);
+// }
 
 void InDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
 	NodeQuanLyHoSoThiSinh* p;
+	cout<<"Danh sach ho so sinh vien\n";
 	for (p = Q.head; p != NULL; p = p->next) {
 		InQuanLyHoSo(p->info);
 	}
 }
 
+void  sapXepDiem_Desc(ListQuanLyHoSoThiSinh& Q){
+	NodeQuanLyHoSoThiSinh* p,*q;
+	QuanLyHoSoThiSinh temp;
+	for (p = Q.head; p != NULL; p = p->next){
+		for (q = p -> next; q != NULL; q = q-> next) {
+			if(p->info.TS.fTongDiem < q->info.TS.fTongDiem){
+				temp = p->info;
+				p->info = q->info;
+				q->info = temp;
+			}
+		}
+	}
+	
+
+}
+NodeQuanLyHoSoThiSinh *search_Name(ListQuanLyHoSoThiSinh& Q, string name){
+	NodeQuanLyHoSoThiSinh* p;
+	p= Q.head;
+	while(p != NULL) {
+		if(p->info.TS.sHoTen == name){
+			return p;
+
+		}
+		p= p->next;
+	}
+
+}
+void timkiemDSName(ListQuanLyHoSoThiSinh& Q){
+	string name;
+	cin.ignore();
+	cout <<"Nhap ten thi sinh can tim : ";
+	getline(cin, name);
+	NodeQuanLyHoSoThiSinh *p = search_Name(Q, name);
+	if(p != NULL){
+		for(p= Q.head; p != NULL; p = p->next){
+			if(p->info.TS.sHoTen == name){
+				InQuanLyHoSo(p->info);
+			}
+		}
+	}else{
+		cout<<"Error search_Name";
+	}
+
+
+}
+void removeHS_dautien(ListQuanLyHoSoThiSinh& Q){
+	NodeQuanLyHoSoThiSinh* p;
+	if(Q.head != NULL){
+		p = Q.head; 
+		Q.head = Q.head -> next;
+		delete p;
+		if(Q.head == NULL){
+			Q.tail= NULL;
+		}
+		cout<<"Remove complete!"<<endl;
+	}else{
+		cout<<"Not exist list !!!"<<endl;
+	}
+
+}
 
 void MenuTitle()
 {
@@ -271,9 +350,9 @@ void MenuTitle()
 	std::cout << "|| 1. Nhap thong tin ho so                   ||\n";
 	std::cout << "|| 2. Hien cac ho so                         ||\n";
 	std::cout << "|| 3. Thong tin nganh va khoa cua truong     ||\n";
-	std::cout << "|| 4. ||\n";
-	std::cout << "|| 5. ||\n";
-	std::cout << "|| 6. ||\n";
+	std::cout << "|| 4. Sap xep thi sinh theo diem\n";
+	std::cout << "|| 5. Tim kiem thi sinh theo ten\n";
+	std::cout << "|| 6. Xoa ho so dau tien\n";
 	std::cout << "|| 7. ||\n";
 	std::cout << "|| 8. ||\n";
 	std::cout << "|| 9. ||\n";
@@ -315,14 +394,17 @@ void xu_li_du_lieu()
 	}
 	case 4:
 	{
+		sapXepDiem_Desc(QLHSTS);
 		break;
 	}
 	case 5:
 	{
+		timkiemDSName(QLHSTS);
 		break;
 	}
 	case 6:
 	{
+		removeHS_dautien(QLHSTS);
 		break;
 	}
 	case 7:
