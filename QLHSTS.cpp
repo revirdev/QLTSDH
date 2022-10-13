@@ -48,8 +48,7 @@ struct ThiSinh
 };
 
 struct QuanLyHoSoThiSinh {
-	int sts;
-	ThiSinh dsTS[100];
+	ThiSinh TS;
 	Khoa dsKH[KHOA_MAX];
 };
 
@@ -74,7 +73,7 @@ Khoa CNTT =
 
 Khoa NN =
 { "NNNHB101", "Ngoai Ngu", "101 Nguyen Hien",
-	{{"NN1", "Tieng Trung", 34.94f, 150}, {"NN2", "Tieng Anh", 33.85f, 200},
+	{{"NN1", "Tieng Trung", 27.94f, 150}, {"NN2", "Tieng Anh", 28.35f, 200},
 	{"NN3", "Tieng Nhat", 26.5f, 100}},
 };
 
@@ -163,6 +162,7 @@ void NhapThiSinh(ThiSinh& a) {
 	// Lay diem uu tien
 	a.fDiemUT = DUT(a.sKhuVuc);
 
+	// Nhap diem cac mon
 	std::cout << "Nhap diem mon 1: "; cin >> a.fDiemMon1;
 	std::cout << "Nhap diem mon 2: "; cin >> a.fDiemMon2;
 	std::cout << "Nhap diem mon 3: "; cin >> a.fDiemMon3;
@@ -205,19 +205,12 @@ void InThiSinh(ThiSinh a) {
 
 void NhapQuanLyHoSo(QuanLyHoSoThiSinh& a) {
 	cout << "\n===NHAP THONG TIN HO SO===\n";
-	std::cout << "\nNhap so thi sinh muon nhap: "; cin >> a.sts;
-	for (int i = 0; i < a.sts; i++)
-	{
-		cout << "\n\n(Nhap Thi sinh thu " << i + 1 << ")" << endl;
-		NhapThiSinh(a.dsTS[i]);
-	}
-
+	NhapThiSinh(a.TS);
 }
 
 void InQuanLyHoSo(QuanLyHoSoThiSinh& a) {
-	cout << "\n===HO SO CUA CAC THI SINH===\n";
-	for (int i = 0; i < a.sts; i++)
-		InThiSinh(a.dsTS[i]);
+	cout << "\n===HO SO CUA THI SINH===\n";
+	InThiSinh(a.TS);	
 }
 
 void QuanLyHoSoIniatior(ListQuanLyHoSoThiSinh& Q) {
@@ -252,9 +245,14 @@ void ChenDauQLHSTS(ListQuanLyHoSoThiSinh& Q, NodeQuanLyHoSoThiSinh* p) {
 void NhapDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
 	NodeQuanLyHoSoThiSinh* p;
 	QuanLyHoSoThiSinh x;
-	NhapQuanLyHoSo(x);
-	p = getNodeQLHSTS(x);
-	ChenDauQLHSTS(Q, p);
+	int n;
+	cin.ignore();
+	cout << "\nNhap so ho so muon quan ly: "; cin >> n;
+	for (int i = 0; i < n; i++) {
+		NhapQuanLyHoSo(x);
+		p = getNodeQLHSTS(x);
+		ChenDauQLHSTS(Q, p);
+	}
 }
 
 void InDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
@@ -264,6 +262,57 @@ void InDSQLHSTS(ListQuanLyHoSoThiSinh& Q) {
 	}
 }
 
+void RemoveHead(ListQuanLyHoSoThiSinh& Q) {
+	NodeQuanLyHoSoThiSinh* p;
+	if (Q.head != NULL) {
+		p = Q.head;
+		Q.head = Q.head->next;
+		delete p;
+		if (Q.head == NULL)
+			Q.tail = NULL;
+	}
+}
+
+NodeQuanLyHoSoThiSinh* TimHoSoTheoMaHS(ListQuanLyHoSoThiSinh Q, string h) {
+	NodeQuanLyHoSoThiSinh* p;
+	int test = 0;
+	p = Q.head;
+	while (p != NULL) {
+		if (p->info.TS.sMaHS == h)
+			return p;
+		p = p->next;
+	}
+}
+
+void TimKiemMaHSTheoK(ListQuanLyHoSoThiSinh& Q) {
+	string h;
+	cin.ignore();
+	cout << "\nNhap ma ho so can tim: "; getline(cin, h);
+	
+	NodeQuanLyHoSoThiSinh* p;
+	p = TimHoSoTheoMaHS(QLHSTS, h);
+	
+	if (p == NULL)
+		cout << "\nKhong co ma ho so nay!\n";
+	else
+		for (p = Q.head; p != NULL; p = p->next) {
+			if (p->info.TS.sMaHS == h)
+				InQuanLyHoSo(p->info);
+		}
+}
+
+void Sort_Des(ListQuanLyHoSoThiSinh& Q) {
+	NodeQuanLyHoSoThiSinh* p, * q;
+	QuanLyHoSoThiSinh temp;
+	for (p = Q.head; p != NULL; p = p->next) {
+		for (q = p->next; q != NULL; q = q->next)
+			if (p->info.TS.fTongDiem < q->info.TS.fTongDiem) {
+				temp = p->info;
+				p->info = q->info;
+				q->info = temp;
+			}
+	}
+}
 
 void MenuTitle()
 {
@@ -271,9 +320,9 @@ void MenuTitle()
 	std::cout << "|| 1. Nhap thong tin ho so                   ||\n";
 	std::cout << "|| 2. Hien cac ho so                         ||\n";
 	std::cout << "|| 3. Thong tin nganh va khoa cua truong     ||\n";
-	std::cout << "|| 4. ||\n";
-	std::cout << "|| 5. ||\n";
-	std::cout << "|| 6. ||\n";
+	std::cout << "|| 4. Sap xep giam dan theo tong diem        ||\n";
+	std::cout << "|| 5. Tim kiem ho so theo ma ho so           ||\n";
+	std::cout << "|| 6. Xoa ho so dau tien trong danh sach     ||\n";
 	std::cout << "|| 7. ||\n";
 	std::cout << "|| 8. ||\n";
 	std::cout << "|| 9. ||\n";
@@ -315,14 +364,17 @@ void xu_li_du_lieu()
 	}
 	case 4:
 	{
+		Sort_Des(QLHSTS);
 		break;
 	}
 	case 5:
 	{
+		TimKiemMaHSTheoK(QLHSTS);
 		break;
 	}
 	case 6:
 	{
+		RemoveHead(QLHSTS);
 		break;
 	}
 	case 7:
