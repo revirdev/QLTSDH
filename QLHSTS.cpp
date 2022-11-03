@@ -5,9 +5,7 @@ Nhom 7 - Hanoi Close University Manager
 - Ta Huu Cuong - 2110A03
 */
 
-#include <iostream>
-#include <string>
-#include <iomanip>
+#include <bits/stdc++.h>
 
 using namespace std;
 const int NGANH_MAX = 3;
@@ -15,30 +13,30 @@ const int KHOA_MAX = 3;
 const int NGANH_DKI_MAX = 10;
 
 struct Nganh {
-	string sMaNganh;
-	string sTenNganh;
+	char sMaNganh[50];
+	char sTenNganh[50];
 	float fDiemChuan;
 	int iChiTieu;
 };
 
 struct Khoa {
-	string sMaKhoa;
-	string sTenKhoa;
-	string sDiaChi;
+	char sMaKhoa[50];
+	char sTenKhoa[50];
+	char sDiaChi[50];
 	Nganh dsNG[NGANH_MAX];
 };
 
 struct ThiSinh
 {
-	string sMaHS;
-	string sSBD;
-	string sHoTen;
-	string sNgaySinh;
-	string sQueQuan;
-	string sKhuVuc;
-	string sGioiTinh;
-	string sSDT;
-	string NganhDKI[NGANH_DKI_MAX];
+	char sMaHS[50];
+	char sSBD[50];
+	char sHoTen[50];
+	char sNgaySinh[50];
+	char sQueQuan[50];
+	char sKhuVuc[50];
+	char sGioiTinh[50];
+	char sSDT[50];
+	char NganhDKI[NGANH_DKI_MAX][50];
 	float fDiemUT;
 	float fDiemMon1;
 	float fDiemMon2;
@@ -133,14 +131,14 @@ void InThongTinKhoaVaNganh() {
 
 void NhapThiSinh(ThiSinh& a) {
 	std::cin.ignore();
-	std::cout << "Nhap ma ho so: "; getline(cin, a.sMaHS);
-	std::cout << "Nhap so bao danh: "; getline(cin, a.sSBD);
-	std::cout << "Nhap ho ten thi sinh: "; getline(cin, a.sHoTen);
-	std::cout << "Nhap ngay sinh: "; getline(cin, a.sNgaySinh);
-	std::cout << "Nhap que quan: "; getline(cin, a.sQueQuan);
-	std::cout << "Nhap khu vuc: "; getline(cin, a.sKhuVuc);
-	std::cout << "Nhap gioi tinh: "; getline(cin, a.sGioiTinh);
-	std::cout << "Nhap so dien thoai: "; getline(cin, a.sSDT);
+	std::cout << "Nhap ma ho so: "; gets( a.sMaHS);
+	std::cout << "Nhap so bao danh: "; gets( a.sSBD);
+	std::cout << "Nhap ho ten thi sinh: "; gets( a.sHoTen);
+	std::cout << "Nhap ngay sinh: "; gets( a.sNgaySinh);
+	std::cout << "Nhap que quan: "; gets( a.sQueQuan);
+	std::cout << "Nhap khu vuc: "; gets( a.sKhuVuc);
+	std::cout << "Nhap gioi tinh: "; gets( a.sGioiTinh);
+	std::cout << "Nhap so dien thoai: "; gets( a.sSDT);
 
 	// DKI NGANH
 	a.slng = 0;
@@ -157,7 +155,7 @@ void NhapThiSinh(ThiSinh& a) {
 	for (int i = 0; i < a.slng; i++)
 	{
 		std::cout << "Nhap ma nganh so " << i + 1 << ":";
-		getline(cin, a.NganhDKI[i]);
+		gets( a.NganhDKI[i]);
 	}
 
 	// Lay diem uu tien
