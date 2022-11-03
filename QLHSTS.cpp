@@ -1,5 +1,5 @@
 /*
-Nhom 7 - Hanoi Close University Manager
+Nhom 7 - Hanoi Open University Manager
 - Nguyen Quang Ha - 2110A03
 - Nguyen Van Dung - 2110A03
 - Ta Huu Cuong - 2110A03
@@ -11,6 +11,7 @@ using namespace std;
 const int NGANH_MAX = 3;
 const int KHOA_MAX = 3;
 const int NGANH_DKI_MAX = 10;
+FILE *file;
 
 struct Nganh {
 	char sMaNganh[50];
@@ -342,6 +343,40 @@ void removeHS_dautien(ListQuanLyHoSoThiSinh& Q){
 
 }
 
+void luuFile(FILE* f, ListQuanLyHoSoThiSinh Q){
+	f = fopen("DS.dat","wb");
+	int n=0;
+	NodeQuanLyHoSoThiSinh* p;
+	for(p= Q.head; p != NULL; p = p->next)
+		n=n+1;
+	fwrite(&n,sizeof(int),1,f);
+	cout<<"Ghi xong so danh sach quan ly\n";
+	for(p= Q.head; p != NULL; p = p->next)
+		fwrite(&p->info, sizeof(QuanLyHoSoThiSinh),1,f);
+	fclose(f);
+	cout<<"Ghi xong danh sach quan ly";
+}
+
+void docFile(FILE* f, ListQuanLyHoSoThiSinh &Q) {
+	QuanLyHoSoThiSinh x;
+	int i, n;
+	NodeQuanLyHoSoThiSinh *p;
+	f = fopen("DS.dat", "rb");
+	fread(&n, sizeof(int),1,f);
+	cout << "\n So phieu danh sach quan ly = " << endl;
+
+	for (i=0; i<n; i++) {
+		fread(&x, sizeof(QuanLyHoSoThiSinh), 1, f);
+		p = getNodeQLHSTS(x);
+		ChenDauQLHSTS(Q, p);
+	}
+	fclose(f);
+
+	cout << "\n Doc file thanh cong!" << endl;
+	InDSQLHSTS(Q);
+}
+
+
 void MenuTitle()
 {
 	std::cout << "============= HE_THONG_TUYEN_SINH =============\n";
@@ -407,10 +442,14 @@ void xu_li_du_lieu()
 	}
 	case 7:
 	{
+		
+		luuFile(file ,QLHSTS);
 		break;
 	}
 	case 8:
 	{
+		
+		docFile(file ,QLHSTS);
 		break;
 	}
 	case 9:
